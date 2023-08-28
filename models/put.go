@@ -6,7 +6,7 @@ import (
 	"github.com/labstack/echo"
 )
 
-func PutProdutos(c echo.Context) error {
+func PutProduto(c echo.Context) error {
 	id := c.Param("id")
 	for i := range produtos {
 		if produtos[i].Id == id {
