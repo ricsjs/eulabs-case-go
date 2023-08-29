@@ -11,5 +11,6 @@ func main() {
 	e.GET("/produtos", handler.GetAll)
 	e.GET("/produtos/:id", handler.GetProduto)
 	e.POST("/produtos", handler.PostProdutos)
+	e.PUT("/produtos/:id", handler.PutProduto)
 	e.Logger.Fatal(e.Start(":9000"))
 }

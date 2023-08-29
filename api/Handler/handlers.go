@@ -9,6 +9,7 @@ import (
 )
 
 func GetAll(c echo.Context) error {
+	//retorna o status 201 e o JSON de produtos
 	return c.JSON(http.StatusOK, service.Produtos)
 }
 
@@ -35,4 +36,22 @@ func GetProduto(c echo.Context) error {
 		}
 	}
 	return c.JSON(http.StatusBadRequest, nil)
+}
+
+func PutProduto(c echo.Context) error {
+	id := c.Param("id")
+	produto := models.Produto{}
+	err := c.Bind(&produto)
+
+	if err != nil {
+		return echo.NewHTTPError(http.StatusUnprocessableEntity)
+	}
+
+	for i, p := range service.Produtos {
+		if p.Id == id {
+			service.Produtos[i] = produto
+			return c.JSON(http.StatusOK, "Produto atualizado com sucesso!")
+		}
+	}
+	return c.JSON(http.StatusNotFound, "Produto não encontrado!")
 }
