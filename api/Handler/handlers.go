@@ -3,12 +3,27 @@ package handler
 import (
 	models "eulabs-case-go/api/Models"
 	service "eulabs-case-go/api/Service"
+	"eulabs-case-go/database"
+	"fmt"
+	"log"
 	"net/http"
 
 	"github.com/labstack/echo"
 )
 
 func GetAll(c echo.Context) error {
+	db, err := database.OpenConnection()
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer db.Close()
+	produtos, err := models.GetAll(db)
+	if err != nil {
+		log.Fatal(err)
+	}
+	for _, p := range produtos {
+		fmt.Println(p)
+	}
 	//retorna o status 201 e o JSON de produtos
 	return c.JSON(http.StatusOK, service.Produtos)
 }
