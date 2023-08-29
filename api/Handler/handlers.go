@@ -55,3 +55,14 @@ func PutProduto(c echo.Context) error {
 	}
 	return c.JSON(http.StatusNotFound, "Produto não encontrado!")
 }
+
+func DeleteProduto(c echo.Context) error {
+	id := c.Param("id")
+	for i, produto := range service.Produtos {
+		if produto.Id == id {
+			service.Produtos = append(service.Produtos[:i], service.Produtos[i+1:]...)
+			return c.JSON(http.StatusOK, "Produto removido com sucesso!")
+		}
+	}
+	return c.JSON(http.StatusNotFound, "Produto não encontrado!")
+}
