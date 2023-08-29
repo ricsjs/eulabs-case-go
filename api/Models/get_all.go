@@ -11,7 +11,7 @@ func GetAll(db *sql.DB) ([]Produto, error) {
 	defer rows.Close()
 	for rows.Next() {
 		var p Produto
-		err = rows.Scan(&p.Id, &p.Nome, &p.Preco, &p.Marca.Nome, &p.Status)
+		err = rows.Scan(&p.Id, &p.Nome, &p.Preco, &p.Status)
 		if err != nil {
 			return nil, err
 		}

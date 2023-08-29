@@ -2,17 +2,21 @@ package models
 
 import (
 	"database/sql"
+
+	"github.com/rs/xid"
 )
 
 func ProdutoInsert(db *sql.DB, p Produto) error {
-	sql, err := db.Prepare("INSERT INTO produto (nome, preco, marca, status) VALUES (?, ?, ?, ?)")
+	sql, err := db.Prepare("INSERT INTO produto (id, nome, preco, status) VALUES (?, ?, ?, ?)")
 
 	if err != nil {
 		return err
 	}
 
 	defer sql.Close()
-	_, err = sql.Exec(p.Nome, p.Preco, p.Marca, p.Status)
+	guid := xid.New()
+	p.Id = guid.String()
+	_, err = sql.Exec(p.Id, p.Nome, p.Preco, p.Status)
 
 	if err != nil {
 		return err

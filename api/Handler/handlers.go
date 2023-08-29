@@ -49,6 +49,7 @@ func PostProdutos(c echo.Context) error {
 
 	err = models.ProdutoInsert(db, produto)
 	if err != nil {
+		log.Fatal(err)
 		return echo.NewHTTPError(http.StatusInternalServerError)
 	}
 	return c.JSON(http.StatusCreated, "Produto inserido com sucesso!")
