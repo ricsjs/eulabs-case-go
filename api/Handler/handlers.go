@@ -12,15 +12,20 @@ import (
 )
 
 func GetAll(c echo.Context) error {
+	//abre a conexão
 	db, err := database.OpenConnection()
+	//se tiver erro retorna o erro
 	if err != nil {
 		log.Fatal(err)
 	}
+	//fecha a conxão
 	defer db.Close()
 	produtos, err := models.GetAll(db)
+	//se tiver erro retorna o erro
 	if err != nil {
 		log.Fatal(err)
 	}
+	//percorre a quantidade de registros
 	for _, p := range produtos {
 		fmt.Println(p)
 	}
@@ -36,7 +41,13 @@ func PostProdutos(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusUnprocessableEntity)
 	}
 
-	err = service.Save(produto)
+	db, err := database.OpenConnection()
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer db.Close()
+
+	err = models.ProdutoInsert(db, produto)
 	if err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError)
 	}
