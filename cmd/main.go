@@ -1,15 +1,15 @@
 package main
 
 import (
-	"eulabs-case-go/models"
+	handler "eulabs-case-go/api/Handler"
 
 	"github.com/labstack/echo"
 )
 
 func main() {
 	e := echo.New()
-	e.GET("/produtos", models.GetAll)
-	e.GET("/produtos/:id", models.GetProduto)
-	e.POST("/produtos", models.PostProdutos)
+	e.GET("/produtos", handler.GetAll)
+	e.GET("/produtos/:id", handler.GetProduto)
+	e.POST("/produtos", handler.PostProdutos)
 	e.Logger.Fatal(e.Start(":9000"))
 }

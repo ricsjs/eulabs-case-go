@@ -1,6 +1,7 @@
-package models
+package handler
 
 import (
+	service "eulabs-case-go/api/Service"
 	"net/http"
 
 	"github.com/labstack/echo"
@@ -8,7 +9,7 @@ import (
 
 func GetProduto(c echo.Context) error {
 	id := c.Param("id")
-	for _, produto := range produtos {
+	for _, produto := range service.Produtos {
 		if produto.Id == id {
 			c.JSON(http.StatusOK, produto)
 		}
