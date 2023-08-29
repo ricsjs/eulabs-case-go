@@ -4,7 +4,6 @@ import (
 	models "eulabs-case-go/api/Models"
 	service "eulabs-case-go/api/Service"
 	"eulabs-case-go/database"
-	"fmt"
 	"log"
 	"net/http"
 
@@ -27,10 +26,10 @@ func GetAll(c echo.Context) error {
 	}
 	//percorre a quantidade de registros
 	for _, p := range produtos {
-		fmt.Println(p)
+		//retorna os produtos em json
+		c.JSON(http.StatusOK, p)
 	}
-	//retorna o status 201 e o JSON de produtos
-	return c.JSON(http.StatusOK, service.Produtos)
+	return nil
 }
 
 func PostProdutos(c echo.Context) error {
