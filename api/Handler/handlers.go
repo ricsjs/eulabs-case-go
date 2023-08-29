@@ -55,13 +55,23 @@ func PostProdutos(c echo.Context) error {
 }
 
 func GetProduto(c echo.Context) error {
+	// Obtém o valor do parâmetro id da URL
 	id := c.Param("id")
-	for _, produto := range service.Produtos {
-		if produto.Id == id {
-			c.JSON(http.StatusOK, produto)
-		}
+	// Abre a conexão com o banco de dados
+	db, err := database.OpenConnection()
+	if err != nil {
+		log.Fatal(err)
 	}
-	return c.JSON(http.StatusBadRequest, nil)
+	defer db.Close()
+	// Chama a função GetById para buscar o produto com o id informado
+	produto, err := models.GetById(db, id)
+	if err != nil {
+		// Se houver erro, retorna o status 400 e uma mensagem de erro
+		log.Fatal(err)
+		return c.JSON(http.StatusBadRequest, "Produto não encontrado")
+	}
+	// Se não houver erro, retorna o status 200 e o produto em formato JSON
+	return c.JSON(http.StatusOK, produto)
 }
 
 func PutProduto(c echo.Context) error {
