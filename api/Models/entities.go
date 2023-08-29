@@ -5,7 +5,7 @@ type Produtos []Produto
 var produtos Produtos
 
 type Produto struct {
-	Id    string
+	Id    string  `json:"string"`
 	Nome  string  `json:"nome"`
 	Preco float64 `json:"preco"`
 	// Marca  Marca   `json:"marca"`

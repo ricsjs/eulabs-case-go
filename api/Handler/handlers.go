@@ -15,14 +15,14 @@ func GetAll(c echo.Context) error {
 	db, err := database.OpenConnection()
 	//se tiver erro retorna o erro
 	if err != nil {
-		log.Fatal(err)
+		log.Println(err)
 	}
 	//fecha a conxão
 	defer db.Close()
 	produtos, err := models.GetAll(db)
 	//se tiver erro retorna o erro
 	if err != nil {
-		log.Fatal(err)
+		log.Println(err)
 	}
 	//percorre a quantidade de registros
 	for _, p := range produtos {
@@ -33,22 +33,27 @@ func GetAll(c echo.Context) error {
 }
 
 func PostProdutos(c echo.Context) error {
+	//declara a variável produto do tipo Produto
 	produto := models.Produto{}
+	//obter os dados da requisição
 	err := c.Bind(&produto)
-
+	//validacão de erro se existir
 	if err != nil {
 		return echo.NewHTTPError(http.StatusUnprocessableEntity)
 	}
-
+	//abre a conexão com banco de dados
 	db, err := database.OpenConnection()
+	//validacão de erro se existir
 	if err != nil {
-		log.Fatal(err)
+		log.Println(err)
 	}
+	//fecha a conexão com banco de dados
 	defer db.Close()
-
+	//chama a função ProdutoInsert e passa como parâmetro a conexão com bd e o produto
 	err = models.ProdutoInsert(db, produto)
+	//validacão de erro se existir
 	if err != nil {
-		log.Fatal(err)
+		log.Println(err)
 		return echo.NewHTTPError(http.StatusInternalServerError)
 	}
 	return c.JSON(http.StatusCreated, "Produto inserido com sucesso!")
@@ -60,14 +65,14 @@ func GetProduto(c echo.Context) error {
 	// Abre a conexão com o banco de dados
 	db, err := database.OpenConnection()
 	if err != nil {
-		log.Fatal(err)
+		log.Println(err)
 	}
 	defer db.Close()
 	// Chama a função GetById para buscar o produto com o id informado
 	produto, err := models.GetById(db, id)
 	if err != nil {
 		// Se houver erro, retorna o status 400 e uma mensagem de erro
-		log.Fatal(err)
+		log.Println(err)
 		return c.JSON(http.StatusBadRequest, "Produto não encontrado")
 	}
 	// Se não houver erro, retorna o status 200 e o produto em formato JSON
@@ -93,12 +98,22 @@ func PutProduto(c echo.Context) error {
 }
 
 func DeleteProduto(c echo.Context) error {
+	//recebe um id como parâmetro
 	id := c.Param("id")
-	for i, produto := range service.Produtos {
-		if produto.Id == id {
-			service.Produtos = append(service.Produtos[:i], service.Produtos[i+1:]...)
-			return c.JSON(http.StatusOK, "Produto removido com sucesso!")
-		}
+	//abre a conexão com o banco de dados
+	db, err := database.OpenConnection()
+	//validacão de erro se existir
+	if err != nil {
+		log.Println(err)
 	}
-	return c.JSON(http.StatusNotFound, "Produto não encontrado!")
+	//fecha o banco de dados após a execução da função
+	defer db.Close()
+	//chama a função DeleteProduto e passa a conexão com o banco de dados e o id do produto
+	err = models.DeleteProduto(db, id)
+	//validacão de erro se existir
+	if err != nil {
+		log.Println(err)
+		return c.JSON(http.StatusBadRequest, "Produto não encontrado")
+	}
+	return c.JSON(http.StatusOK, "Produto removido com sucesso")
 }
