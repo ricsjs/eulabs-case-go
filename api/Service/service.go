@@ -6,14 +6,14 @@ import (
 	"eulabs-case-go/database"
 )
 
-func GetAll() ([]models.Produto, error) {
+func GetAllProducts() ([]models.Produto, error) {
 	db, err := database.OpenConnection()
 	if err != nil {
 		return nil, err
 	}
 	defer db.Close()
 
-	return repository.GetAll(db)
+	return repository.GetAllProducts(db)
 }
 
 func CreateProduto(produto models.Produto) error {
@@ -23,7 +23,7 @@ func CreateProduto(produto models.Produto) error {
 	}
 	defer db.Close()
 
-	return repository.ProdutoInsert(db, produto)
+	return repository.CreateProduto(db, produto)
 }
 
 func GetProdutoByID(id string) (models.Produto, error) {
@@ -33,7 +33,7 @@ func GetProdutoByID(id string) (models.Produto, error) {
 	}
 	defer db.Close()
 
-	return repository.GetById(db, id)
+	return repository.GetProdutoByID(db, id)
 }
 
 func UpdateProduto(produto models.Produto) error {

@@ -4,12 +4,19 @@ import (
 	"database/sql"
 	"errors"
 	models "eulabs-case-go/api/Models"
+	"eulabs-case-go/database"
 	"log"
 
 	"github.com/rs/xid"
 )
 
-func GetAll(db *sql.DB) ([]models.Produto, error) {
+func GetAllProducts(db *sql.DB) ([]models.Produto, error) {
+	db, err := database.OpenConnection()
+	if err != nil {
+		return nil, err
+	}
+	defer db.Close()
+
 	produtos := []models.Produto{}
 	sql, err := db.Query("SELECT * FROM produto")
 	if err != nil {
@@ -29,7 +36,13 @@ func GetAll(db *sql.DB) ([]models.Produto, error) {
 	return produtos, nil
 }
 
-func ProdutoInsert(db *sql.DB, p models.Produto) error {
+func CreateProduto(db *sql.DB, p models.Produto) error {
+	db, err := database.OpenConnection()
+	if err != nil {
+		return err
+	}
+	defer db.Close()
+
 	sql, err := db.Prepare("INSERT INTO produto (id, nome, preco, status) VALUES (?, ?, ?, ?)")
 
 	if err != nil {
@@ -49,7 +62,13 @@ func ProdutoInsert(db *sql.DB, p models.Produto) error {
 	return nil
 }
 
-func GetById(db *sql.DB, id string) (models.Produto, error) {
+func GetProdutoByID(db *sql.DB, id string) (models.Produto, error) {
+	db, err := database.OpenConnection()
+	if err != nil {
+		return models.Produto{}, err
+	}
+	defer db.Close()
+
 	var produto models.Produto
 
 	sql, err := db.Prepare("SELECT * FROM produto WHERE id = ?")
@@ -66,10 +85,18 @@ func GetById(db *sql.DB, id string) (models.Produto, error) {
 }
 
 func DeleteProduto(db *sql.DB, id string) error {
+	db, err := database.OpenConnection()
+	if err != nil {
+		return err
+	}
+
+	defer db.Close()
+
 	sql, err := db.Prepare("DELETE FROM produto WHERE id = ?")
 	if err != nil {
 		return err
 	}
+
 	defer sql.Close()
 
 	result, err := sql.Exec(id)
@@ -84,11 +111,17 @@ func DeleteProduto(db *sql.DB, id string) error {
 	if rowsAffected == 0 {
 		return errors.New("Produto não encontrado")
 	}
+
 	log.Printf("%d linhas afetadas\n", rowsAffected)
 	return nil
 }
 
 func UpdateProduto(db *sql.DB, p models.Produto) error {
+	db, err := database.OpenConnection()
+	if err != nil {
+		return err
+	}
+	defer db.Close()
 
 	sql, err := db.Exec(`UPDATE produto SET nome=?, preco=?, status=? WHERE id=?`, p.Nome, p.Preco, p.Status, p.Id)
 
@@ -97,6 +130,7 @@ func UpdateProduto(db *sql.DB, p models.Produto) error {
 	}
 
 	rowsAffected, err := sql.RowsAffected()
+
 	if err != nil {
 		log.Println(err)
 		return err

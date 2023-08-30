@@ -10,7 +10,7 @@ import (
 )
 
 func GetAll(c echo.Context) error {
-	produtos, err := service.GetAll()
+	produtos, err := service.GetAllProducts()
 	if err != nil {
 		log.Println(err)
 		return err
@@ -18,7 +18,7 @@ func GetAll(c echo.Context) error {
 	return c.JSON(http.StatusOK, produtos)
 }
 
-func PostProdutos(c echo.Context) error {
+func PostProduto(c echo.Context) error {
 	produto := models.Produto{}
 	err := c.Bind(&produto)
 	if err != nil {
