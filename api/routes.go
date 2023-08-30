@@ -1,4 +1,4 @@
-package routes
+package api
 
 import (
 	handler "eulabs-case-go/api/Handler"

@@ -1,13 +1,13 @@
 package main
 
 import (
-	"eulabs-case-go/routes"
+	"eulabs-case-go/api"
 
 	"github.com/labstack/echo"
 )
 
 func main() {
 	e := echo.New()
-	routes.SetupRoutes(e)
+	api.SetupRoutes(e)
 	e.Logger.Fatal(e.Start(":3000"))
 }
