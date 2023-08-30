@@ -4,19 +4,12 @@ import (
 	"database/sql"
 	"errors"
 	models "eulabs-case-go/api/Models"
-	"eulabs-case-go/database"
 	"log"
 
 	"github.com/rs/xid"
 )
 
 func GetAllProducts(db *sql.DB) ([]models.Produto, error) {
-	db, err := database.OpenConnection()
-	if err != nil {
-		return nil, err
-	}
-	defer db.Close()
-
 	produtos := []models.Produto{}
 	sql, err := db.Query("SELECT * FROM produto")
 	if err != nil {
@@ -37,12 +30,6 @@ func GetAllProducts(db *sql.DB) ([]models.Produto, error) {
 }
 
 func CreateProduto(db *sql.DB, p models.Produto) error {
-	db, err := database.OpenConnection()
-	if err != nil {
-		return err
-	}
-	defer db.Close()
-
 	sql, err := db.Prepare("INSERT INTO produto (id, nome, preco, status) VALUES (?, ?, ?, ?)")
 
 	if err != nil {
@@ -63,12 +50,6 @@ func CreateProduto(db *sql.DB, p models.Produto) error {
 }
 
 func GetProdutoByID(db *sql.DB, id string) (models.Produto, error) {
-	db, err := database.OpenConnection()
-	if err != nil {
-		return models.Produto{}, err
-	}
-	defer db.Close()
-
 	var produto models.Produto
 
 	sql, err := db.Prepare("SELECT * FROM produto WHERE id = ?")
@@ -85,13 +66,6 @@ func GetProdutoByID(db *sql.DB, id string) (models.Produto, error) {
 }
 
 func DeleteProduto(db *sql.DB, id string) error {
-	db, err := database.OpenConnection()
-	if err != nil {
-		return err
-	}
-
-	defer db.Close()
-
 	sql, err := db.Prepare("DELETE FROM produto WHERE id = ?")
 	if err != nil {
 		return err
@@ -117,12 +91,6 @@ func DeleteProduto(db *sql.DB, id string) error {
 }
 
 func UpdateProduto(db *sql.DB, p models.Produto) error {
-	db, err := database.OpenConnection()
-	if err != nil {
-		return err
-	}
-	defer db.Close()
-
 	sql, err := db.Exec(`UPDATE produto SET nome=?, preco=?, status=? WHERE id=?`, p.Nome, p.Preco, p.Status, p.Id)
 
 	if err != nil {
