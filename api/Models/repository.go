@@ -3,6 +3,7 @@ package models
 import (
 	"database/sql"
 	"errors"
+	"log"
 
 	"github.com/rs/xid"
 )
@@ -92,5 +93,21 @@ func DeleteProduto(db *sql.DB, id string) error {
 		return errors.New("Produto não encontrado")
 	}
 	//se alguma linha foi afetada, significa que o produto foi deletado com sucesso
+	return nil
+}
+
+func UpdateProduto(db *sql.DB, p Produto) error {
+	result, err := db.Exec(`UPDATE produto SET nome=?, preco=?, status=? WHERE id=?`, p.Nome, p.Preco, p.Status, p.Id)
+	if err != nil {
+		log.Println(err)
+		return err
+	}
+
+	rowsAffected, err := result.RowsAffected()
+	if err != nil {
+		log.Println(err)
+		return err
+	}
+	log.Printf("%d linhas afetadas\n", rowsAffected)
 	return nil
 }

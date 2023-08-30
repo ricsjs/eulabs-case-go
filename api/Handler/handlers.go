@@ -2,7 +2,6 @@ package handler
 
 import (
 	models "eulabs-case-go/api/Models"
-	service "eulabs-case-go/api/Service"
 	"eulabs-case-go/database"
 	"log"
 	"net/http"
@@ -80,21 +79,38 @@ func GetProduto(c echo.Context) error {
 }
 
 func PutProduto(c echo.Context) error {
+	// cria uma variável para armazenar o produto
+	var p models.Produto
+	// obtém o id do produto da rota
 	id := c.Param("id")
-	produto := models.Produto{}
-	err := c.Bind(&produto)
 
+	// vincula o corpo do pedido à estrutura do produto
+	err := c.Bind(&p)
 	if err != nil {
-		return echo.NewHTTPError(http.StatusUnprocessableEntity)
+		log.Println(err)
+		return c.JSON(http.StatusBadRequest, "Erro na requisição")
+	}
+	// valida se há erros na vinculação
+	if err != nil {
+		log.Println(err)
 	}
 
-	for i, p := range service.Produtos {
-		if p.Id == id {
-			service.Produtos[i] = produto
-			return c.JSON(http.StatusOK, "Produto atualizado com sucesso!")
-		}
+	p.Id = id
+
+	// abre a conexão com o banco de dados
+	db, err := database.OpenConnection()
+	// valida se há erros na abertura da conexão
+	if err != nil {
+		log.Println(err)
 	}
-	return c.JSON(http.StatusNotFound, "Produto não encontrado!")
+	// fecha a conexão ao final da função
+	defer db.Close()
+	// chama a função UpdateProduto para executar a query de update
+	err = models.UpdateProduto(db, p)
+	if err != nil {
+		log.Println(err)
+	}
+	return c.JSON(http.StatusOK, "Produto atualizado com sucesso")
 }
 
 func DeleteProduto(c echo.Context) error {
