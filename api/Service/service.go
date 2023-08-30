@@ -3,55 +3,31 @@ package service
 import (
 	models "eulabs-case-go/api/Models"
 	repository "eulabs-case-go/api/Repository"
-	"eulabs-case-go/database"
 )
 
 func GetAllProducts() ([]models.Produto, error) {
-	db, err := database.OpenConnection()
-	if err != nil {
-		return nil, err
-	}
-	defer db.Close()
-
-	return repository.GetAllProducts(db)
+	return repository.GetAllProducts()
 }
 
 func CreateProduto(produto models.Produto) error {
-	db, err := database.OpenConnection()
-	if err != nil {
-		return err
-	}
-	defer db.Close()
-
-	return repository.CreateProduto(db, produto)
+	return repository.CreateProduto(produto)
 }
 
 func GetProdutoByID(id string) (models.Produto, error) {
-	db, err := database.OpenConnection()
+
+	produto, err := repository.GetProdutoByID(id)
+
 	if err != nil {
 		return models.Produto{}, err
 	}
-	defer db.Close()
 
-	return repository.GetProdutoByID(db, id)
+	return produto, nil
 }
 
 func UpdateProduto(produto models.Produto) error {
-	db, err := database.OpenConnection()
-	if err != nil {
-		return err
-	}
-	defer db.Close()
-
-	return repository.UpdateProduto(db, produto)
+	return repository.UpdateProduto(produto)
 }
 
 func DeleteProduto(id string) error {
-	db, err := database.OpenConnection()
-	if err != nil {
-		return err
-	}
-	defer db.Close()
-
-	return repository.DeleteProduto(db, id)
+	return repository.DeleteProduto(id)
 }
