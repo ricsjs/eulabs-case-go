@@ -79,22 +79,20 @@ func GetProduto(c echo.Context) error {
 }
 
 func PutProduto(c echo.Context) error {
-	// cria uma variável para armazenar o produto
+	//cria uma variável para armazenar o produto
 	var p models.Produto
-	// obtém o id do produto da rota
+	//obtém o id do produto da rota
 	id := c.Param("id")
 
-	// vincula o corpo do pedido à estrutura do produto
+	//vincula o corpo do pedido à estrutura do produto
 	err := c.Bind(&p)
+	// valida se há erros na vinculação
 	if err != nil {
 		log.Println(err)
 		return c.JSON(http.StatusBadRequest, "Erro na requisição")
 	}
-	// valida se há erros na vinculação
-	if err != nil {
-		log.Println(err)
-	}
 
+	//atribui o valor do id do parâmetro à variável p.Id
 	p.Id = id
 
 	// abre a conexão com o banco de dados

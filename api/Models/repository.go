@@ -97,17 +97,20 @@ func DeleteProduto(db *sql.DB, id string) error {
 }
 
 func UpdateProduto(db *sql.DB, p Produto) error {
-	result, err := db.Exec(`UPDATE produto SET nome=?, preco=?, status=? WHERE id=?`, p.Nome, p.Preco, p.Status, p.Id)
+	//executa a query
+	sql, err := db.Exec(`UPDATE produto SET nome=?, preco=?, status=? WHERE id=?`, p.Nome, p.Preco, p.Status, p.Id)
+	//verifica se houve erro
 	if err != nil {
 		log.Println(err)
 		return err
 	}
-
-	rowsAffected, err := result.RowsAffected()
+	//armazena a quantidade de linhas afetadas
+	rowsAffected, err := sql.RowsAffected()
 	if err != nil {
 		log.Println(err)
 		return err
 	}
+	//mostra a quantidade de linhas afetadas no log
 	log.Printf("%d linhas afetadas\n", rowsAffected)
 	return nil
 }
