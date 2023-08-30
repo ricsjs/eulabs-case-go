@@ -2,8 +2,7 @@ package handler
 
 import (
 	models "eulabs-case-go/api/Models"
-	repository "eulabs-case-go/api/Repository"
-	"eulabs-case-go/database"
+	service "eulabs-case-go/api/Service"
 	"log"
 	"net/http"
 
@@ -11,42 +10,22 @@ import (
 )
 
 func GetAll(c echo.Context) error {
-	db, err := database.OpenConnection()
-
+	produtos, err := service.GetAll()
 	if err != nil {
 		log.Println(err)
 		return err
 	}
-
-	defer db.Close()
-	produtos, err := repository.GetAll(db)
-
-	if err != nil {
-		log.Println(err)
-		return err
-	}
-
 	return c.JSON(http.StatusOK, produtos)
 }
 
 func PostProdutos(c echo.Context) error {
-
 	produto := models.Produto{}
 	err := c.Bind(&produto)
-
 	if err != nil {
 		return echo.NewHTTPError(http.StatusUnprocessableEntity)
 	}
 
-	db, err := database.OpenConnection()
-
-	if err != nil {
-		log.Println(err)
-	}
-
-	defer db.Close()
-
-	err = repository.ProdutoInsert(db, produto)
+	err = service.CreateProduto(produto)
 	if err != nil {
 		log.Println(err)
 		return echo.NewHTTPError(http.StatusInternalServerError)
@@ -55,15 +34,9 @@ func PostProdutos(c echo.Context) error {
 }
 
 func GetProduto(c echo.Context) error {
-
 	id := c.Param("id")
-	db, err := database.OpenConnection()
-	if err != nil {
-		log.Println(err)
-	}
-	defer db.Close()
 
-	produto, err := repository.GetById(db, id)
+	produto, err := service.GetProdutoByID(id)
 	if err != nil {
 		log.Println(err)
 		return c.JSON(http.StatusBadRequest, "Produto não encontrado")
@@ -73,47 +46,32 @@ func GetProduto(c echo.Context) error {
 }
 
 func PutProduto(c echo.Context) error {
-
-	var p models.Produto
+	var produto models.Produto
 	id := c.Param("id")
-	err := c.Bind(&p)
-
+	err := c.Bind(&produto)
 	if err != nil {
 		log.Println(err)
 		return c.JSON(http.StatusBadRequest, "Erro na requisição")
 	}
 
-	p.Id = id
-	db, err := database.OpenConnection()
-
+	produto.Id = id
+	err = service.UpdateProduto(produto)
 	if err != nil {
 		log.Println(err)
+		return c.JSON(http.StatusInternalServerError, "Erro ao atualizar o produto")
 	}
 
-	defer db.Close()
-
-	err = repository.UpdateProduto(db, p)
-	if err != nil {
-		log.Println(err)
-	}
 	return c.JSON(http.StatusOK, "Produto atualizado com sucesso")
 }
 
 func DeleteProduto(c echo.Context) error {
-
 	id := c.Param("id")
-	db, err := database.OpenConnection()
 
-	if err != nil {
-		log.Println(err)
-	}
-
-	defer db.Close()
-
-	err = repository.DeleteProduto(db, id)
+	err := service.DeleteProduto(id)
 	if err != nil {
 		log.Println(err)
 		return c.JSON(http.StatusBadRequest, "Produto não encontrado")
 	}
+
 	return c.JSON(http.StatusOK, "Produto removido com sucesso")
 }

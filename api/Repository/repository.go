@@ -84,7 +84,7 @@ func DeleteProduto(db *sql.DB, id string) error {
 	if rowsAffected == 0 {
 		return errors.New("Produto não encontrado")
 	}
-
+	log.Printf("%d linhas afetadas\n", rowsAffected)
 	return nil
 }
 
