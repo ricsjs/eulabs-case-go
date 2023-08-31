@@ -33,3 +33,25 @@ func TestGetAllProducts(t *testing.T) {
 	//verifica se o mock foi chamado corretamente
 	mock.ExpectationsWereMet()
 }
+
+func TestCreateProduto(t *testing.T) {
+	db, mock, err := sqlmock.New()
+	require.NoError(t, err)
+	defer db.Close()
+
+	p := models.Produto{
+		Nome:   "Produto de Teste",
+		Preco:  30.0,
+		Status: "Ativo",
+	}
+
+	mock.ExpectPrepare("INSERT INTO produto").
+		ExpectExec().WithArgs(sqlmock.AnyArg(), p.Nome, p.Preco, p.Status).
+		WillReturnResult(sqlmock.NewResult(1, 1))
+
+	err = CreateProduto(p)
+	assert.NoError(t, err)
+
+	// Verificar se o mock foi chamado corretamente
+	mock.ExpectationsWereMet()
+}
