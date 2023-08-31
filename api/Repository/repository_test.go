@@ -55,3 +55,35 @@ func TestCreateProduto(t *testing.T) {
 	// Verificar se o mock foi chamado corretamente
 	mock.ExpectationsWereMet()
 }
+
+func TestGetProdutoByID(t *testing.T) {
+	// Criar um mock do banco de dados
+	db, mock, err := sqlmock.New()
+	require.NoError(t, err)
+	defer db.Close()
+
+	// Criar um produto que será buscado no banco de dados
+	expected := models.Produto{
+		Id:     "cjoej167dit4d26vefv0",
+		Nome:   "Produto de Teste",
+		Preco:  30,
+		Status: "Ativo",
+	}
+
+	// Configurar o mock para retornar o produto esperado
+	rows := sqlmock.NewRows([]string{"id", "nome", "preco", "status"}).
+		AddRow(expected.Id, expected.Nome, expected.Preco, expected.Status)
+	mock.ExpectPrepare("SELECT \\* FROM produto WHERE id = ?").ExpectQuery().
+		WithArgs(expected.Id).
+		WillReturnRows(rows)
+
+	// Chamar a função GetProdutoByID e verificar se não há erro
+	actual, err := GetProdutoByID(expected.Id)
+	assert.NoError(t, err)
+
+	// Verificar se o produto retornado é igual ao esperado
+	assert.Equal(t, expected, actual)
+
+	// Verificar se o mock foi chamado corretamente
+	mock.ExpectationsWereMet()
+}
