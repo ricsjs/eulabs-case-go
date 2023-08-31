@@ -101,3 +101,20 @@ func TestUpdateProduto(t *testing.T) {
 
 	mock.ExpectationsWereMet()
 }
+
+func TestDeleteProduto(t *testing.T) {
+	db, mock, err := sqlmock.New()
+	require.NoError(t, err)
+	defer db.Close()
+
+	id := "cjoej167dit4d26vefv0"
+
+	mock.ExpectPrepare("DELETE FROM produto").ExpectExec().
+		WithArgs(id).
+		WillReturnResult(sqlmock.NewResult(0, 1))
+
+	err = DeleteProduto(id)
+	assert.NoError(t, err)
+
+	mock.ExpectationsWereMet()
+}
