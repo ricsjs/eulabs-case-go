@@ -17,7 +17,7 @@ func NewConfig() *Config {
 	return &Config{
 		User:     "root",
 		Password: "root",
-		Host:     "db-container",
+		Host:     "localhost",
 		Port:     "3306",
 		DBName:   "eulabscase",
 	}
