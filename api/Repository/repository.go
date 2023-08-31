@@ -15,12 +15,12 @@ func GetAllProducts() ([]models.Produto, error) {
 		return []models.Produto{}, err
 	}
 	defer db.Close()
+
 	produtos := []models.Produto{}
 	sql, err := db.Query("SELECT * FROM produto")
 	if err != nil {
 		return produtos, err
 	}
-
 	defer sql.Close()
 
 	for sql.Next() {
@@ -40,22 +40,19 @@ func CreateProduto(p models.Produto) error {
 		return err
 	}
 	defer db.Close()
-	sql, err := db.Prepare("INSERT INTO produto (id, nome, preco, status) VALUES (?, ?, ?, ?)")
 
+	sql, err := db.Prepare("INSERT INTO produto (id, nome, preco, status) VALUES (?, ?, ?, ?)")
 	if err != nil {
 		return err
 	}
-
 	defer sql.Close()
 
 	guid := xid.New()
 	p.Id = guid.String()
 	_, err = sql.Exec(p.Id, p.Nome, p.Preco, p.Status)
-
 	if err != nil {
 		return err
 	}
-
 	return nil
 }
 
@@ -65,8 +62,8 @@ func GetProdutoByID(id string) (models.Produto, error) {
 		return models.Produto{}, err
 	}
 	defer db.Close()
-	var produto models.Produto
 
+	var produto models.Produto
 	sql, err := db.Prepare("SELECT * FROM produto WHERE id = ?")
 	if err != nil {
 		return produto, err
@@ -86,19 +83,17 @@ func UpdateProduto(p models.Produto) error {
 		return err
 	}
 	defer db.Close()
-	sql, err := db.Exec(`UPDATE produto SET nome=?, preco=?, status=? WHERE id=?`, p.Nome, p.Preco, p.Status, p.Id)
 
+	sql, err := db.Exec(`UPDATE produto SET nome=?, preco=?, status=? WHERE id=?`, p.Nome, p.Preco, p.Status, p.Id)
 	if err != nil {
 		return err
 	}
 
 	rowsAffected, err := sql.RowsAffected()
-
 	if err != nil {
 		log.Println(err)
 		return err
 	}
-
 	log.Printf("%d linhas afetadas\n", rowsAffected)
 	return nil
 }
@@ -109,17 +104,18 @@ func DeleteProduto(id string) error {
 		return err
 	}
 	defer db.Close()
+
 	sql, err := db.Prepare("DELETE FROM produto WHERE id = ?")
 	if err != nil {
 		return err
 	}
-
 	defer sql.Close()
 
 	result, err := sql.Exec(id)
 	if err != nil {
 		return err
 	}
+
 	rowsAffected, err := result.RowsAffected()
 	if err != nil {
 		return err

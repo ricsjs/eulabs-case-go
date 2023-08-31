@@ -35,13 +35,11 @@ func PostProduto(c echo.Context) error {
 
 func GetProduto(c echo.Context) error {
 	id := c.Param("id")
-
 	produto, err := service.GetProdutoByID(id)
 	if err != nil {
 		log.Println(err)
 		return c.JSON(http.StatusBadRequest, "Produto não encontrado")
 	}
-
 	return c.JSON(http.StatusOK, produto)
 }
 
@@ -60,18 +58,15 @@ func PutProduto(c echo.Context) error {
 		log.Println(err)
 		return c.JSON(http.StatusInternalServerError, "Erro ao atualizar o produto")
 	}
-
 	return c.JSON(http.StatusOK, "Produto atualizado com sucesso")
 }
 
 func DeleteProduto(c echo.Context) error {
 	id := c.Param("id")
-
 	err := service.DeleteProduto(id)
 	if err != nil {
 		log.Println(err)
 		return c.JSON(http.StatusBadRequest, "Produto não encontrado")
 	}
-
 	return c.JSON(http.StatusOK, "Produto removido com sucesso")
 }

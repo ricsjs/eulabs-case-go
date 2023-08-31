@@ -6,28 +6,41 @@ import (
 )
 
 func GetAllProducts() ([]models.Produto, error) {
-	return repository.GetAllProducts()
+	produtos, err := repository.GetAllProducts()
+	if err != nil {
+		return nil, err
+	}
+	return produtos, nil
 }
 
 func CreateProduto(produto models.Produto) error {
-	return repository.CreateProduto(produto)
+	err := repository.CreateProduto(produto)
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
 func GetProdutoByID(id string) (models.Produto, error) {
-
 	produto, err := repository.GetProdutoByID(id)
-
 	if err != nil {
 		return models.Produto{}, err
 	}
-
 	return produto, nil
 }
 
 func UpdateProduto(produto models.Produto) error {
-	return repository.UpdateProduto(produto)
+	err := repository.UpdateProduto(produto)
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
 func DeleteProduto(id string) error {
-	return repository.DeleteProduto(id)
+	err := repository.DeleteProduto(id)
+	if err != nil {
+		return err
+	}
+	return nil
 }
