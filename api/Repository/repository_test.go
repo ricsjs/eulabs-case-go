@@ -107,7 +107,7 @@ func TestDeleteProduto(t *testing.T) {
 	require.NoError(t, err)
 	defer db.Close()
 
-	id := "cjoej167dit4d26vefv0"
+	id := "cjoeir67dit3uq2ccth0"
 
 	mock.ExpectPrepare("DELETE FROM produto").ExpectExec().
 		WithArgs(id).

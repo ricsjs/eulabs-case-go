@@ -80,6 +80,43 @@ func GetProdutoByID(id string) (models.Produto, error) {
 	return produto, nil
 }
 
+func GetProdutosByPrice(price1 float32, price2 float32) ([]models.Produto, error) {
+	db, err := database.OpenConnection(c)
+	if err != nil {
+		return []models.Produto{}, err
+	}
+	defer db.Close()
+
+	produtos := []models.Produto{}
+	sql, err := db.Prepare("SELECT * FROM produto WHERE preco BETWEEN ? and ?")
+	if err != nil {
+		return produtos, err
+	}
+	defer sql.Close()
+
+	rows, err := sql.Query(price1, price2)
+	if err != nil {
+		return produtos, err
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		var p models.Produto
+		err = rows.Scan(&p.Id, &p.Nome, &p.Preco, &p.Status)
+		if err != nil {
+			return produtos, err
+		}
+		produtos = append(produtos, p)
+	}
+
+	err = rows.Err()
+	if err != nil {
+		return produtos, err
+	}
+
+	return produtos, nil
+}
+
 func UpdateProduto(p models.Produto) error {
 	db, err := database.OpenConnection(c)
 	if err != nil {

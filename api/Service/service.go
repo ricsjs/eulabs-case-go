@@ -29,6 +29,14 @@ func GetProdutoByID(id string) (models.Produto, error) {
 	return produto, nil
 }
 
+func GetProdutosByPrice(price1 float32, price2 float32) ([]models.Produto, error) {
+	produtos, err := repository.GetProdutosByPrice(price1, price2)
+	if err != nil {
+		return nil, err
+	}
+	return produtos, nil
+}
+
 func UpdateProduto(produto models.Produto) error {
 	err := repository.UpdateProduto(produto)
 	if err != nil {

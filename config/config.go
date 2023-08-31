@@ -2,8 +2,9 @@ package config
 
 import (
 	"fmt"
-	"log"
 )
+
+//optei por deixar esse arquivo visualizável no repositório do github para ter acesso às configurações
 
 type Config struct {
 	User     string
@@ -17,13 +18,12 @@ func NewConfig() *Config {
 	return &Config{
 		User:     "root",
 		Password: "root",
-		Host:     "localhost",
+		Host:     "db-container",
 		Port:     "3306",
 		DBName:   "eulabscase",
 	}
 }
 
 func (c *Config) GetDSN() string {
-	log.Println(c.Host)
 	return fmt.Sprintf("%s:%s@tcp(%s:%s)/%s", c.User, c.Password, c.Host, c.Port, c.DBName)
 }

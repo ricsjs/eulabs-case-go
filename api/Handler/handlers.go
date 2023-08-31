@@ -5,6 +5,7 @@ import (
 	service "eulabs-case-go/api/Service"
 	"log"
 	"net/http"
+	"strconv"
 
 	"github.com/labstack/echo"
 )
@@ -39,6 +40,33 @@ func GetProduto(c echo.Context) error {
 	if err != nil {
 		log.Println(err)
 		return c.JSON(http.StatusBadRequest, "Produto não encontrado")
+	}
+	return c.JSON(http.StatusOK, produto)
+}
+
+func GetProdutosByPrice(c echo.Context) error {
+	price1 := c.Param("price1")
+	price2 := c.Param("price2")
+
+	// Converter as strings para float64 usando a base 10 e 32 bits
+	price1Float, err := strconv.ParseFloat(price1, 10)
+	if err != nil {
+		return err
+	}
+	price2Float, err := strconv.ParseFloat(price2, 10)
+	if err != nil {
+		return err
+	}
+
+	// Converter os float64 para float32
+	price1Float32 := float32(price1Float)
+	price2Float32 := float32(price2Float)
+
+	// Chamar a função GetProdutosByPrice com os valores convertidos
+	produto, err := service.GetProdutosByPrice(price1Float32, price2Float32)
+	if err != nil {
+		log.Println(err)
+		return c.JSON(http.StatusBadRequest, "Nenhum produto encontrado")
 	}
 	return c.JSON(http.StatusOK, produto)
 }
