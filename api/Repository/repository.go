@@ -3,14 +3,17 @@ package repository
 import (
 	"errors"
 	models "eulabs-case-go/api/Models"
+	"eulabs-case-go/config"
 	"eulabs-case-go/database"
 	"log"
 
 	"github.com/rs/xid"
 )
 
+var c = config.NewConfig()
+
 func GetAllProducts() ([]models.Produto, error) {
-	db, err := database.OpenConnection()
+	db, err := database.OpenConnection(c)
 	if err != nil {
 		return []models.Produto{}, err
 	}
@@ -35,7 +38,7 @@ func GetAllProducts() ([]models.Produto, error) {
 }
 
 func CreateProduto(p models.Produto) error {
-	db, err := database.OpenConnection()
+	db, err := database.OpenConnection(c)
 	if err != nil {
 		return err
 	}
@@ -57,7 +60,7 @@ func CreateProduto(p models.Produto) error {
 }
 
 func GetProdutoByID(id string) (models.Produto, error) {
-	db, err := database.OpenConnection()
+	db, err := database.OpenConnection(c)
 	if err != nil {
 		return models.Produto{}, err
 	}
@@ -78,7 +81,7 @@ func GetProdutoByID(id string) (models.Produto, error) {
 }
 
 func UpdateProduto(p models.Produto) error {
-	db, err := database.OpenConnection()
+	db, err := database.OpenConnection(c)
 	if err != nil {
 		return err
 	}
@@ -99,7 +102,7 @@ func UpdateProduto(p models.Produto) error {
 }
 
 func DeleteProduto(id string) error {
-	db, err := database.OpenConnection()
+	db, err := database.OpenConnection(c)
 	if err != nil {
 		return err
 	}

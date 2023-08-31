@@ -1,0 +1,34 @@
+version: '3'
+services:
+  database:
+    image: mysql:latest
+    container_name: db-container
+    environment:
+      MYSQL_USER: root
+      MYSQL_PASSWORD: root
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: eulabscase
+    ports:
+      - "3306:3306"
+    networks:
+      - eulabs-network
+    volumes:
+      - database-data:/var/lib/mysql
+
+  golang-server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: go-server-container
+    ports:
+      - "3000:3000"
+    networks:
+      - eulabs-network
+    depends_on:
+      - database
+
+networks:
+  eulabs-network:
+
+volumes:
+  database-data:
