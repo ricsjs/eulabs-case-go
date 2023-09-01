@@ -17,7 +17,7 @@ func TestGetAllProducts(t *testing.T) {
 
 	//cria um slide de produtos que eu espero (nesse caso, eu já tenho esse registro cadastrado no banco de dados)
 	expected := []models.Produto{
-		{Id: "cjojulsga4tf92a1m480", Nome: "Carro", Preco: 300000, Status: "Indisponível"},
+		{Id: "cjokm14ga4tf928cvka0", Nome: "Carro", Preco: 300000, Status: "Indisponível"},
 	}
 
 	//configuro o mock para retornar os registros esperados
@@ -61,7 +61,7 @@ func TestGetProdutoByID(t *testing.T) {
 	defer db.Close()
 
 	expected := models.Produto{
-		Id:     "cjojuqm7dit34p0oi7rg",
+		Id:     "cjokm14ga4tf928cvka0",
 		Nome:   "Produto de Teste",
 		Preco:  30,
 		Status: "Ativo",
