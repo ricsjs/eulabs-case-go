@@ -24,8 +24,4 @@
 
 ### Testes de unidade:
 - Para realizar os testes de unidade, você deverá alterar o código para simular o comportamento da função de acordo com os registros que estão cadastrados no seu banco de dados local.
-<<<<<<< HEAD
 - Se necessário, o host de conexão deverá ser alterado para localhost.
-=======
-- Se necessário, o host de conexão deverá ser alterado para localhost.
->>>>>>> 2bd8c5356e9328fab4100b929fda41a49c56f443
