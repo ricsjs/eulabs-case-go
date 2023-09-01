@@ -12,7 +12,7 @@
 - Rodar o comando: docker-compose up (irá subir dois containers, um para o servidor, outro para o banco)
 - Criar a tabela 'produto' no banco de dados (há um arquivo chamado sql-bd no repositório com o código SQL utilizado para a criação do banco de dados)
 
-#### Após realizar os passos acima, já poderá fazer as requisições, deixei um arquivo JSON como base.
+#### Após realizar os passos acima, já poderá fazer as requisições, deixei um arquivo JSON com nome de eulabscase.json como base.
 
 ### Requisições: 
 - GET: localhost/produtos (irá mostrar todos os registros da tabela de produtos)
