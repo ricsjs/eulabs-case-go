@@ -10,9 +10,9 @@
 ### Passos para rodar o projeto:
 - Fazer o clone do projeto: git clone https://github.com/ricsjs/eulabs-case-go.git
 - Rodar o comando: docker-compose up (irá subir dois containers, um para o servidor, outro para o banco)
-- Criar a tabela 'produto' no banco de dados
+- Criar a tabela 'produto' no banco de dados (há um arquivo chamado sql-bd no repositório com o código SQL utilizado para a criação do banco de dados)
 
-#### Após realizar os passos acima, já poderá fazer as requisições, deixei um arquivo JSON como base.
+#### Após realizar os passos acima, já poderá fazer as requisições, deixei um arquivo JSON deixei um arquivo JSON com a colection do postman com o nome de eulabscase.json como base.
 
 ### Requisições: 
 - GET: localhost/produtos (irá mostrar todos os registros da tabela de produtos)
