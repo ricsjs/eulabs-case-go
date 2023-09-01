@@ -17,7 +17,7 @@ func TestGetAllProducts(t *testing.T) {
 
 	//cria um slide de produtos que eu espero (nesse caso, eu já tenho esse registro cadastrado no banco de dados)
 	expected := []models.Produto{
-		{Id: "cjodb0d933lkbrfg74j0", Nome: "Carro", Preco: 300000, Status: "Indisponível"},
+		{Id: "cjojulsga4tf92a1m480", Nome: "Carro", Preco: 300000, Status: "Indisponível"},
 	}
 
 	//configuro o mock para retornar os registros esperados
@@ -61,7 +61,7 @@ func TestGetProdutoByID(t *testing.T) {
 	defer db.Close()
 
 	expected := models.Produto{
-		Id:     "cjoej167dit4d26vefv0",
+		Id:     "cjojuqm7dit34p0oi7rg",
 		Nome:   "Produto de Teste",
 		Preco:  30,
 		Status: "Ativo",
@@ -82,31 +82,25 @@ func TestGetProdutoByID(t *testing.T) {
 }
 
 func TestGetProdutosByPrice(t *testing.T) {
-	// Criar um mock do banco de dados
 	db, mock, err := sqlmock.New()
 	require.NoError(t, err)
 	defer db.Close()
 
-	// Criar um slice de produtos esperados
 	expected := []models.Produto{
-		{Id: "cjofd8crikbc2ep2m4ng", Nome: "Caneta", Preco: 2.0, Status: "Indisponível"},
+		{Id: "cjojuqm7dit34p0oi7rg", Nome: "Produto de Teste", Preco: 30.0, Status: "Ativo"},
 	}
 
-	// Configurar o mock para retornar os produtos esperados
 	rows := sqlmock.NewRows([]string{"id", "nome", "preco", "status"}).
 		AddRow(expected[0].Id, expected[0].Nome, expected[0].Preco, expected[0].Status)
 	mock.ExpectPrepare("SELECT \\* FROM produto WHERE preco BETWEEN \\? and \\?").ExpectQuery().
 		WithArgs(1.0, 3.0).
 		WillReturnRows(rows)
 
-	// Chamar a função GetProdutosByPrice e verificar se não há erro
-	actual, err := GetProdutosByPrice(1.0, 3.0)
+	actual, err := GetProdutosByPrice(1.0, 30.0)
 	assert.NoError(t, err)
 
-	// Verificar se os produtos retornados são iguais aos esperados
 	assert.Equal(t, expected, actual)
 
-	// Verificar se o mock foi chamado corretamente
 	mock.ExpectationsWereMet()
 }
 
@@ -116,7 +110,7 @@ func TestUpdateProduto(t *testing.T) {
 	defer db.Close()
 
 	p := models.Produto{
-		Id:     "cjoej167dit4d26vefv0",
+		Id:     "cjojuqm7dit34p0oi7rg",
 		Nome:   "Produto 1",
 		Preco:  15.00,
 		Status: "Inativo",
@@ -136,7 +130,7 @@ func TestDeleteProduto(t *testing.T) {
 	require.NoError(t, err)
 	defer db.Close()
 
-	id := "cjoeir67dit3uq2ccth0"
+	id := "cjojuqm7dit34p0oi7rg"
 
 	mock.ExpectPrepare("DELETE FROM produto").ExpectExec().
 		WithArgs(id).
