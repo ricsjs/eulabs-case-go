@@ -1,0 +1,9 @@
+CREATE DATABASE eulabscase;
+USE eulabscase;
+
+CREATE TABLE produto (
+  id VARCHAR(50) PRIMARY KEY,
+  nome VARCHAR(50) NOT NULL,
+  preco DECIMAL(10,2) NOT NULL,
+  status VARCHAR(50) NOT NULL
+);
