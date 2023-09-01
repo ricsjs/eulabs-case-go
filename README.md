@@ -22,6 +22,3 @@
 - PUT: localhost/produtos/id (deverá passar como parâmetro o ID do produto que deseja atualizar e a mesma estrutura do objeto JSON do método POST)
 - DELETE: localhost/produtos/id (deverá passar como parâmetro o ID do produto que deseja deletar)
 
-### Testes de unidade:
-- Para realizar os testes de unidade, você deverá alterar o código para simular o comportamento da função de acordo com os registros que estão cadastrados no seu banco de dados local.
-- Se necessário, o host de conexão deverá ser alterado para localhost.
